@@ -18,9 +18,8 @@ export class AttestStationService
     public attestInvoice = async (data: any) => {
         console.log('attesting invoice', data)
         try {
-            console.log(JSON.stringify(data))
             const result = await this.http.post('/api/v1/document/wrap', data)
-            console.log('attested')
+
             return result.data
         } catch (e) {
             console.log('Unable to attest Invoice', e)
@@ -30,11 +29,12 @@ export class AttestStationService
 
     public verifyInvoice = async (data: any) => {
         try {
-            const result = await this.http.post('/api/v1/document/verify', data)
+            console.log('[verify invoice] data ==>', data)
+            const result = await this.http.post('/api/v1/verify', data)
             
             return result.data
         } catch (e) {
-           // invalid EKYB
+            console.log(e)
            console.log('unable to verify invoice')
            return null
         }

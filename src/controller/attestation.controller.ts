@@ -12,7 +12,7 @@ export class AttestationController {
     try {
         invoice.customer.merchant_logo = undefined
         invoice.supplier.merchant_logo = undefined
-        const result  = await this.attestationService.attestInvoice({
+        invoice.attestation = await this.attestationService.attestInvoice({
           invoice_id: invoice.invoice_id,
           currency: invoice.currency,
           invoice_number: invoice.invoice_number,
@@ -31,9 +31,9 @@ export class AttestationController {
           $template: DIGITAL_SIGNATURE_TEMPLATE
         })
         
-        invoice.attestation = result;
+        console.log('[digital signature response]', invoice.attestation)
+
         invoice.status = 'GENERATED'
-        console.log(result)
         return invoice;
       } catch (e) {
         console.log('[error]', e)
