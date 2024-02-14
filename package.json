@@ -1,0 +1,45 @@
+{
+  "name": "processor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "rimraf ./build && tsc",
+    "start:dev": "nodemon",
+    "start": "node ./build/src/index.js",
+    "test": "jest",
+    "lint": "eslint src"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@faker-js/faker": "^8.1.0",
+    "@jest/globals": "^29.7.0",
+    "@types/jest": "^29.5.5",
+    "@types/node": "^20.7.0",
+    "@typescript-eslint/eslint-plugin": "^6.8.0",
+    "@typescript-eslint/parser": "^6.8.0",
+    "eslint": "^8.51.0",
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.1",
+    "rimraf": "^5.0.4",
+    "ts-jest": "^29.1.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@kafkajs/confluent-schema-registry": "^3.3.0",
+    "@types/body-parser": "^1.19.3",
+    "@types/express": "^4.17.18",
+    "avro": "^0.1.0",
+    "axios": "^1.6.2",
+    "class-validator": "^0.14.0",
+    "dotenv": "^16.3.1",
+    "joi": "^17.10.2",
+    "kafkajs": "^2.2.4",
+    "moment": "^2.29.4",
+    "node-cache": "^5.1.2",
+    "winston": "^3.11.0"
+  }
+}

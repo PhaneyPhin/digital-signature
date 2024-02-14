@@ -1,0 +1,4 @@
+export enum Topic {
+    ATTEST_INVOICE = 'ATTEST_INVOICE',
+    VERIFY_INVOICE = 'VERIFY_INVOICE'
+}

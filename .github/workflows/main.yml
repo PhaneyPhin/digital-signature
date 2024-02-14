@@ -1,0 +1,97 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - dev
+      - 'releases/*'
+
+jobs:
+  test-typescript:
+    name: TypeScript Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        id: setup-node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.8.0
+          cache: npm
+
+      - name: Copy Environment
+        id: CE
+        run: cp .env.example .env
+        
+      - name: Install Dependencies
+        id: npm-ci
+        run: npm ci
+      
+      - name: Build project
+        id: build-project
+        run: npm run build
+
+      - name: Check code style
+        id: code-style
+        run: npm run lint    
+        
+      - name: Test
+        id: npm-ci-test
+        run: npm run test
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          registry: https://docker.dev.digitaleconomy.gov.kh
+          username: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
+          password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+      
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: "docker.dev.digitaleconomy.gov.kh/${{ github.event.repository.name }}"
+      
+      - name: Build and push Docker image
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+      # - name: Log in to Docker Hub
+      #   uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+      #   with:
+      #     registry: https://docker.dev.digitaleconomy.gov.kh
+      #     username: Phaney
+      #     password: Phaney070898248
+      
+      # - name: Extract metadata (tags, labels) for Docker
+      #   id: meta
+      #   uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+      #   with:
+      #     images: docker.dev.digitaleconomy.gov.kh/${{ github.event.repository.name }}
+      
+      # - name: Build and push Docker image
+      #   uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+      #   with:
+      #     context: .
+      #     file: ./Dockerfile
+      #     push: true
+      #     tags: ${{ steps.meta.outputs.tags }}
+      #     labels: ${{ steps.meta.outputs.labels }}
+      # - name: Build the Docker image
+      #   run: docker build . --file Dockerfile --tag caminv-sv-invoiceprocessor:$(date +%s)
+      
+      - name: Invoke deployment hook  'https://caminv-dev-merc.mef.gov.kh/hooks/${{ github.event.repository.name }}'
+        uses: distributhor/workflow-webhook@v1
+        env:
+          webhook_url: 'https://caminv-dev-merc.mef.gov.kh/hooks/${{ github.event.repository.name }}'
+          webhook_secret: ${{  secrets.DEV_DEPLOY_SECRETE_KEY }}
