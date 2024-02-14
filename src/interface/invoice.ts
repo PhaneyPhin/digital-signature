@@ -87,6 +87,7 @@ export interface Merchant {
 export interface Invoice {
   currency: string,
   invoice_number: string,
+  status: string;
   invoice_id: string,
   issue_date: string,
   due_date: string | null;

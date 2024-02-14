@@ -7,7 +7,7 @@ import { AttestStationService } from "../services/attestation.service";
 export class AttestationController {
   private readonly attestationService = new AttestStationService();
 
-  @ResponseKafkaMessage({ topic: Topic.ATTEST_INVOICE })
+  @ResponseKafkaMessage({ topic: Topic.ATTEST_INVOICE, replyTopic: Topic.INVOICE_CREATED })
   async attestInvoice(key: string | Buffer, invoice: Invoice) {
     try {
         invoice.customer.merchant_logo = undefined
@@ -32,10 +32,11 @@ export class AttestationController {
         })
         
         invoice.attestation = result;
-
+        invoice.status = 'GENERATED'
+        console.log(result)
         return invoice;
       } catch (e) {
-        console.log(e)
+        console.log('[error]', e)
       }
   }
 

@@ -5,7 +5,7 @@ interface ResponseMessageDecoratorParams {
     topic: string,
     responseSchema?: string,
     errorSchema?: string,
-    produceTopic?: string
+    replyTopic?: string
 } 
 
 function ResponseKafkaMessage(options: ResponseMessageDecoratorParams, decodedParam = false) {
@@ -18,8 +18,10 @@ function ResponseKafkaMessage(options: ResponseMessageDecoratorParams, decodedPa
                 data = JSON.parse(data?.toString())
                 
                 data = await originalMethod.call(this, key, data);
+                const topic = options.replyTopic || 'reply-topic'
+                console.log('reply to topic==>', topic)
                 
-                await producer.send({ topic: options.produceTopic || 'reply-topic', messages: [
+                await producer.send({ topic: topic, messages: [
                     { 
                         key: key,
                         value: JSON.stringify(data),
