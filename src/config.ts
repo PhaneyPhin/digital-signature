@@ -1,6 +1,6 @@
 export const KAFKA_BROKER = process.env.KAFKA_BROKER as string
-export const CLIENT_ID = 'ATTESTATION'
-export const GROUP_ID = "ATTESTATION";
+export const CLIENT_ID = 'ATTESTATION-1'
+export const GROUP_ID = "ATTESTATION-1";
 export const DIGITAL_SIGNATURE_TEMPLATE = {
     "name": "CAM_INVOICE_ATTESTATION",
     "type": "EMBEDDED_RENDERER",

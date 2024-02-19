@@ -15,7 +15,7 @@ export class AttestStationService
         })
     }
 
-    public attestInvoice = async (data: any) => {
+    public attest = async (data: any) => {
         console.log('attesting invoice', data)
         try {
             const result = await this.http.post('/api/v1/document/wrap', data)

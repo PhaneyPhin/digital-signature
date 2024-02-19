@@ -106,6 +106,29 @@ export interface Invoice {
   is_preview: boolean
 }
 
+interface CreditNoteLine extends InvoiceLine {}
+export interface CreditNote {
+  credit_note_id: string,
+  credit_note_number: string,
+  reference_invoice_id: string,
+  reference_invoice_number: string,
+  due_date: string | null;
+  buyer_reference: string | null;
+  buyer_vat_tin: string | null;
+  allowance_charges: AllowanceCharge[] | null;
+  exchange_rate: number;
+  credit_note_lines: CreditNoteLine[] | null;
+  supplier_id: number,
+  customer_id: number,
+  supplier: Merchant;
+  customer: Merchant;
+  tax_total: TaxTotal,
+  legal_monetary_total: LegalMonetaryTotal | null;
+  attestation: any,
+  currency: string,
+  issue_date: string
+}
+
 export interface BatchInvoiceData {
   supplier: Merchant,
   customer: Merchant,

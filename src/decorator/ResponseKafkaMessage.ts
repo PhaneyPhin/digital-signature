@@ -1,4 +1,5 @@
 import { App } from "../container";
+import { Topic } from "../enums/topic";
 import { producer } from "../services/producer";
 
 interface ResponseMessageDecoratorParams {
@@ -18,8 +19,7 @@ function ResponseKafkaMessage(options: ResponseMessageDecoratorParams, decodedPa
                 data = JSON.parse(data?.toString())
                 
                 data = await originalMethod.call(this, key, data);
-                const topic = options.replyTopic || 'reply-topic'
-                console.log('reply to topic==>', topic)
+                const topic = options.replyTopic || Topic.REPLY_TOPIC
                 
                 await producer.send({ topic: topic, messages: [
                     { 

@@ -9,16 +9,17 @@ export const consumeMessage = async () => {
   console.log(App.getTopic())
   await consumer.subscribe({ topics: App.getTopic(), fromBeginning: false });
   await consumer.run({
-  eachMessage: async ({ topic, message }) => {
-      console.info('Received message from topic' + topic)
+    eachMessage: async ({ topic, message }) => {
+        console.info('Received message from topic' + topic)
 
-        if (message.value) {
-          const handle = app.callHandler(topic, message.key?.toString(), message.value)
+          if (message.value) {
+            const handle = app.callHandler(topic, message.key?.toString(), message.value)
 
-          if (! handle) {
-            console.info('No message handler for topic: ' + topic)
+            if (! handle) {
+              console.info('No message handler for topic: ' + topic)
+          }
         }
-      }
-    },
-});
+      },
+  });
+  console.log('cosumed message')
 };
